@@ -20,10 +20,6 @@ const CalcPalette = ({
 }) => {
 	const [index, setIndex] = useState(null);
 
-	const dragOverHandler = (e) => {
-		e.preventDefault();
-	};
-
 	const dragStartHandler = (e, item) => {
 		const elemIdx = blocks.indexOf(item);
 		if (constructorModeEnable) {
@@ -48,30 +44,14 @@ const CalcPalette = ({
 		e.target.style.visibility = 'visible';
 	};
 
-	const dropHandler = (e) => {
-		e.preventDefault();
-		if (droppableSection) {
-			return;
-		}
-
-		const updatedState = [
-			...blocks.slice(0, index - 1),
-			draggableBlock,
-			...blocks.slice(index),
-		];
-		setBlocks(updatedState);
-	};
-
 	return (
 		<div className="calc-palete d-flex flex-column">
 			{blocks.map((block) => (
 				<block.component
 					key={block.id}
 					draggable={constructorModeEnable}
-					onDragOver={(e) => dragOverHandler(e)}
 					onDragStart={(e) => dragStartHandler(e, block)}
-					onDragEnd={(e) => dragEndHandler(e)}
-					onDrop={(e) => dropHandler(e)}
+					onDragEnd={dragEndHandler}
 				/>
 			))}
 		</div>
@@ -79,23 +59,22 @@ const CalcPalette = ({
 };
 
 const mapStateToProps = ({
-	drag: { draggableBlock, droppableSection, constructorModeEnable, blocks },
+	drag: { draggableBlock, droppableSection, blocks },
+	calc: { constructorModeEnable },
 }) => {
 	return {
-		draggableBlock: draggableBlock,
-		droppableSection: droppableSection,
-		constructorModeEnable: constructorModeEnable,
-		blocks: blocks,
+		draggableBlock,
+		droppableSection,
+		constructorModeEnable,
+		blocks,
 	};
 };
 
-const mapDispatchToProps = (dispatch) => {
-	return {
-		dragging: (element) => dispatch(dragging(element)),
-		setDroppableSection: (section) => dispatch(setDroppableSection(section)),
-		dragEnd: () => dispatch(dragEnd()),
-		setBlocks: (blocks) => dispatch(setBlocks(blocks)),
-	};
+const mapDispatchToProps = {
+	dragging,
+	setDroppableSection,
+	dragEnd,
+	setBlocks,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CalcPalette);

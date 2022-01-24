@@ -2,12 +2,18 @@ import DigitalBlock from '../components/Digital-block/DigitalBlock';
 import Display from '../components/Display/Display';
 import EqualBlock from '../components/Equal-block/EqualBlock';
 import Operations from '../components/Operations/Operations';
+import {
+	SET_DROPPABLE_SECTION,
+	SET_DRAGGABLE_BLOCK,
+	SET_BLOCKS,
+	DRAG_START,
+	DRAG_END,
+} from '../actions/constants';
 
 const initialState = {
 	isDraging: false,
 	draggableBlock: null,
 	droppableSection: null,
-	constructorModeEnable: true,
 	blocks: [
 		{ id: 1, name: 'display', component: Display },
 		{ id: 2, name: 'operations', component: Operations },
@@ -16,53 +22,45 @@ const initialState = {
 	],
 };
 
-const DragReducer = (state, { type, payload }) => {
-	if (state === undefined) {
-		return initialState;
-	}
+const dragReducer = (state = initialState, { type, payload }) => {
 	switch (type) {
-		case 'SET_BLOCKS':
+		case SET_BLOCKS:
 			return {
-				...state.drag,
+				...state,
 				blocks: payload,
 			};
-		case 'DRAG_START':
-			if (state.drag.draggableBlock === payload) {
+		case DRAG_START:
+			if (state.draggableBlock === payload) {
 				return { ...state.drag };
 			}
 			return {
-				...state.drag,
+				...state,
 				isDraging: true,
 				draggableBlock: payload,
 			};
 
-		case 'DRAG_END':
+		case DRAG_END:
 			return {
-				...state.drag,
+				...state,
 				isDraging: false,
 				draggableBlock: null,
 			};
 
-		case 'SET_DROPPABLE_SECTION':
+		case SET_DROPPABLE_SECTION:
 			return {
-				...state.drag,
+				...state,
 				droppableSection: payload,
 			};
 
-		case 'SET_DRAGGABLE_BLOCK':
+		case SET_DRAGGABLE_BLOCK:
 			return {
-				...state.drag,
+				...state,
 				draggableBlock: payload,
 			};
 
-		case 'CHANGE_CONSTRUCTOR_MODE':
-			return {
-				...state.drag,
-				constructorModeEnable: !state.drag.constructorModeEnable,
-			};
 		default:
-			return state.drag;
+			return state;
 	}
 };
 
-export default DragReducer;
+export default dragReducer;

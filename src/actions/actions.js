@@ -1,37 +1,49 @@
-const addDigit = (payload) => {
-	return { type: 'ADD_DIGIT', payload: payload };
+import {
+	ADD_DIGIT,
+	CHOOSE_OPERATION,
+	SET_DROPPABLE_SECTION,
+	EVALUATE,
+	SET_DRAGGABLE_BLOCK,
+	SET_BLOCKS,
+	DRAG_START,
+	DRAG_END,
+	CHANGE_CONSTRUCTOR_MODE,
+} from './constants';
+
+const addDigit = (digit) => {
+	return { type: ADD_DIGIT, payload: digit };
 };
 
-const chooseOperation = (payload) => {
-	return { type: 'CHOOSE_OPERATION', payload: payload };
+const chooseOperation = (operation) => {
+	return { type: CHOOSE_OPERATION, payload: operation };
 };
 
-const setBlocks = (payload) => {
-	return { type: 'SET_BLOCKS', payload: payload };
+const setBlocks = (blocks) => {
+	return { type: SET_BLOCKS, payload: blocks };
 };
 
-const setDraggableBlock = (payload) => {
-	return { type: 'SET_DRAGGABLE_BLOCK', payload: payload };
+const setDraggableBlock = (block) => {
+	return { type: SET_DRAGGABLE_BLOCK, payload: block };
 };
 
 const evaluate = () => {
-	return { type: 'EVALUATE' };
+	return { type: EVALUATE };
 };
 
 const dragEnd = () => {
-	return { type: 'DRAG_END' };
+	return { type: DRAG_END };
 };
 
-const dragging = (payload) => {
-	return { type: 'DRAG_START', payload: payload };
+const dragging = (draggableBlock) => {
+	return { type: DRAG_START, payload: draggableBlock };
 };
 
-const setDroppableSection = (payload) => {
-	return { type: 'SET_DROPPABLE_SECTION', payload: payload };
+const setDroppableSection = (section) => {
+	return { type: SET_DROPPABLE_SECTION, payload: section };
 };
 
 const changeConstructorMode = () => {
-	return { type: 'CHANGE_CONSTRUCTOR_MODE' };
+	return { type: CHANGE_CONSTRUCTOR_MODE };
 };
 export {
 	addDigit,

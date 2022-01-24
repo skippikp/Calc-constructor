@@ -1,23 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { evaluate } from '../../actions/actions';
+import eventHoc from '../../HOC/eventHoc';
 import './EqualBlock.css';
 
-const EqualBlock = ({
-	onDragStart,
-	onDragEnd,
-	evaluate,
-	draggable = true,
-	onDblClick,
-}) => {
+const EqualBlock = ({ evaluate }) => {
 	return (
-		<div
-			onDragStart={onDragStart}
-			onDragEnd={onDragEnd}
-			draggable={draggable}
-			onDoubleClick={onDblClick}
-			className="equal"
-		>
+		<div className="equal">
 			<div onClick={evaluate} className="equal_btn btn btn-primary">
 				=
 			</div>
@@ -25,12 +14,8 @@ const EqualBlock = ({
 	);
 };
 
-const mapDispatchToProps = (dispatch) => {
-	return {
-		evaluate: () => dispatch(evaluate()),
-	};
+const mapDispatchToProps = {
+	evaluate,
 };
 
-export default connect(() => {
-	return {};
-}, mapDispatchToProps)(EqualBlock);
+export default connect(null, mapDispatchToProps)(eventHoc(EqualBlock));

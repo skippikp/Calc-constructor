@@ -1,11 +1,10 @@
-import CalcReducer from './CalcReducer';
-import DragReducer from './DragReducer';
+import calcReducer from './CalcReducer';
+import dragReducer from './DragReducer';
+import { combineReducers } from 'redux';
 
-const reducer = (state, action) => {
-	return {
-		calc: CalcReducer(state, action),
-		drag: DragReducer(state, action),
-	};
-};
+const rootReducer = combineReducers({
+	calc: calcReducer,
+	drag: dragReducer,
+});
 
-export default reducer;
+export default rootReducer;

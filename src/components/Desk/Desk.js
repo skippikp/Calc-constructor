@@ -31,6 +31,9 @@ const Desk = ({
 
 	const dragOverHandler = (e, section) => {
 		e.preventDefault();
+		if (!draggableBlock) {
+			return;
+		}
 		if (e.target.className === 'desk-item') {
 			e.target.style.backgroundColor = 'rgba(0, 159, 249, 0.4)';
 		}
@@ -129,23 +132,22 @@ const Desk = ({
 };
 
 const mapStateToProps = ({
-	drag: { draggableBlock, constructorModeEnable, blocks },
+	drag: { draggableBlock, blocks },
+	calc: { constructorModeEnable },
 }) => {
 	return {
-		draggableBlock: draggableBlock,
-		constructorModeEnable: constructorModeEnable,
-		blocks: blocks,
+		draggableBlock,
+		constructorModeEnable,
+		blocks,
 	};
 };
 
-const mapDispatchToProps = (dispatch) => {
-	return {
-		setDroppableSection: (section) => dispatch(setDroppableSection(section)),
-		changeConstructorMode: () => dispatch(changeConstructorMode()),
-		dragEnd: () => dispatch(dragEnd()),
-		setBlocks: (blocks) => dispatch(setBlocks(blocks)),
-		setDraggableBlock: (block) => dispatch(setDraggableBlock(block)),
-	};
+const mapDispatchToProps = {
+	setDroppableSection,
+	changeConstructorMode,
+	dragEnd,
+	setBlocks,
+	setDraggableBlock,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Desk);

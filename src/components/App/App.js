@@ -1,7 +1,6 @@
 import React from 'react';
 import CalcPalette from '../CalcPalette/CalcPalette';
 import Desk from '../Desk/Desk';
-
 import './App.css';
 
 function App() {

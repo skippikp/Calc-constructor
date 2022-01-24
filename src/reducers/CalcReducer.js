@@ -1,11 +1,19 @@
+import {
+	ADD_DIGIT,
+	CHOOSE_OPERATION,
+	EVALUATE,
+	CHANGE_CONSTRUCTOR_MODE,
+} from '../actions/constants';
+
 const initialState = {
 	currentOperand: null,
 	previousOperand: null,
 	operation: null,
 	evaluated: false,
+	constructorModeEnable: true,
 };
 
-const evaluate = ({ calc: { currentOperand, previousOperand, operation } }) => {
+const evaluate = ({ currentOperand, previousOperand, operation }) => {
 	const prev = parseFloat(previousOperand);
 	const current = parseFloat(currentOperand);
 	if (isNaN(prev) || isNaN(current)) {
@@ -34,99 +42,110 @@ const evaluate = ({ calc: { currentOperand, previousOperand, operation } }) => {
 	return computation.toString();
 };
 
-const CalcReducer = (state, { type, payload }) => {
-	if (state === undefined) {
-		return initialState;
-	}
+const calcReducer = (state = initialState, { type, payload }) => {
 	switch (type) {
-		case 'ADD_DIGIT':
-			if (state.drag.constructorModeEnable) {
-				return state.calc;
+		case CHANGE_CONSTRUCTOR_MODE:
+			return {
+				...state,
+				constructorModeEnable: !state.constructorModeEnable,
+			};
+		case ADD_DIGIT:
+			if (state.constructorModeEnable) {
+				return state;
+			}
+
+			if (state.currentOperand === null && payload === '.') {
+				return {
+					...state,
+					currentOperand: '0.',
+				};
 			}
 
 			if (
-				state.calc.evaluated ||
-				(state.calc.currentOperand === null && payload !== '.')
+				state.evaluated ||
+				(state.currentOperand === null && payload !== '.')
 			) {
 				return {
-					...state.calc,
+					...state,
 					currentOperand: payload,
 					evaluated: false,
 				};
 			}
 
-			if (state.calc.currentOperand.length === 11) {
-				return state.calc;
+			if (state.currentOperand.length === 11) {
+				return state;
 			}
 
-			if (payload === '0' && state.calc.currentOperand === null) {
-				return state.calc;
+			if (
+				payload === '0' &&
+				(state.currentOperand === null || state.currentOperand === '0')
+			) {
+				return state;
 			}
 
-			if (payload === '.' && state.calc.currentOperand.includes('.')) {
-				return state.calc;
+			if (payload === '.' && state.currentOperand.includes('.')) {
+				return state;
 			}
 
 			return {
-				...state.calc,
-				currentOperand: `${state.calc.currentOperand}${payload}`,
+				...state,
+				currentOperand: `${state.currentOperand}${payload}`,
 			};
 
-		case 'CHOOSE_OPERATION':
-			if (state.drag.constructorModeEnable) {
-				return state.calc;
+		case CHOOSE_OPERATION:
+			if (state.constructorModeEnable) {
+				return state;
+			}
+
+			if (state.currentOperand === null && state.previousOperand == null) {
+				return state;
 			}
 
 			if (
-				state.calc.currentOperand === null &&
-				state.calc.previousOperand == null
-			) {
-				return state.calc;
-			}
-
-			if (
-				(!state.calc.evaluated && state.calc.currentOperand === null) ||
-				(state.calc.evaluated &&
-					state.calc.currentOperand === state.calc.previousOperand)
+				(!state.evaluated && state.currentOperand === null) ||
+				(state.evaluated && state.currentOperand === state.previousOperand) ||
+				(state.previousOperand &&
+					state.currentOperand === null &&
+					state.operation)
 			) {
 				return {
-					...state.calc,
+					...state,
 					operation: payload,
 				};
 			}
 
-			if (state.calc.previousOperand == null) {
+			if (state.previousOperand == null) {
 				return {
-					...state.calc,
+					...state,
 					operation: payload,
-					previousOperand: state.calc.currentOperand,
+					previousOperand: state.currentOperand,
 					currentOperand: null,
 				};
 			}
 
 			return {
-				...state.calc,
+				...state,
 				currentOperand: evaluate(state),
 				previousOperand: evaluate(state),
 				evaluated: true,
 				operation: payload,
 			};
 
-		case 'EVALUATE':
-			if (state.drag.constructorModeEnable) {
-				return state.calc;
+		case EVALUATE:
+			if (state.constructorModeEnable) {
+				return state;
 			}
 
 			if (
-				state.calc.operation === null ||
-				state.calc.currentOperand === null ||
-				state.calc.previousOperand === null
+				state.operation === null ||
+				state.currentOperand === null ||
+				state.previousOperand === null
 			) {
-				return state.calc;
+				return state;
 			}
 
 			return {
-				...state.calc,
+				...state,
 				evaluated: true,
 				currentOperand: evaluate(state),
 				previousOperand: null,
@@ -134,8 +153,8 @@ const CalcReducer = (state, { type, payload }) => {
 			};
 
 		default:
-			return state.calc;
+			return state;
 	}
 };
 
-export default CalcReducer;
+export default calcReducer;
