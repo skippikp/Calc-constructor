@@ -1,0 +1,15 @@
+.digital-block {
+  display: grid;
+  padding: 5px;
+  border-radius: 5px;
+  height: 200px;
+  width: 200px;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-gap: 5px;
+  box-shadow: 0 3px 2px rgba(0,0,0,0.2);
+}
+
+.numbers_0 {
+  grid-column-start: 1;
+  grid-column-end: 3;
+}
