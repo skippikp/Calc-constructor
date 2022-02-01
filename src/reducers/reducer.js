@@ -1,10 +1,10 @@
 import calcReducer from './CalcReducer';
-import dragReducer from './DragReducer';
+import constructorReducer from './ConstructorReducer';
 import { combineReducers } from 'redux';
 
 const rootReducer = combineReducers({
 	calc: calcReducer,
-	drag: dragReducer,
+	drag: constructorReducer,
 });
 
 export default rootReducer;

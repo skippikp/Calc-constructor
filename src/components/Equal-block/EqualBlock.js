@@ -1,15 +1,17 @@
+import Button from '../Button/Button';
 import React from 'react';
 import { connect } from 'react-redux';
 import { evaluate } from '../../actions/actions';
-import eventHoc from '../../HOC/eventHoc';
 import './EqualBlock.css';
 
 const EqualBlock = ({ evaluate }) => {
 	return (
 		<div className="equal">
-			<div onClick={evaluate} className="equal_btn btn btn-primary">
-				=
-			</div>
+			<Button
+				value={'='}
+				className={'equal_btn btn btn-primary'}
+				onClick={evaluate}
+			/>
 		</div>
 	);
 };
@@ -18,4 +20,4 @@ const mapDispatchToProps = {
 	evaluate,
 };
 
-export default connect(null, mapDispatchToProps)(eventHoc(EqualBlock));
+export default connect(null, mapDispatchToProps)(EqualBlock);

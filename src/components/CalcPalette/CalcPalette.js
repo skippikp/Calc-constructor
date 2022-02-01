@@ -1,17 +1,21 @@
 import React, { useState } from 'react';
 import {
 	dragEnd,
-	dragging,
+	dragStart,
 	setDroppableSection,
 	setBlocks,
 } from '../../actions/actions';
 import { connect } from 'react-redux';
 import './CalcPalette.css';
+import DragContainer from '../../HOC/DragContainer';
+import Display from '../Display/Display';
+import DigitalBlock from '../Digital-block/DigitalBlock';
+import Operations from '../Operations/Operations';
+import EqualBlock from '../Equal-block/EqualBlock';
 
 const CalcPalette = ({
-	draggableBlock,
 	droppableSection,
-	dragging,
+	dragStart,
 	constructorModeEnable,
 	setDroppableSection,
 	dragEnd,
@@ -24,7 +28,7 @@ const CalcPalette = ({
 		const elemIdx = blocks.indexOf(item);
 		if (constructorModeEnable) {
 			setIndex(elemIdx);
-			dragging(item);
+			dragStart(item);
 			setTimeout(() => (e.target.style.visibility = 'hidden'), 50);
 		}
 		return;
@@ -44,26 +48,41 @@ const CalcPalette = ({
 		e.target.style.visibility = 'visible';
 	};
 
+	const renderElement = (element) => {
+		switch (element) {
+			case 'Display':
+				return <Display />;
+			case 'DigitalBlock':
+				return <DigitalBlock />;
+			case 'Operations':
+				return <Operations />;
+			case 'EqualBlock':
+				return <EqualBlock />;
+			default:
+				return <div>Error</div>;
+		}
+	};
+
 	return (
 		<div className="calc-palete d-flex flex-column">
 			{blocks.map((block) => (
-				<block.component
+				<DragContainer
 					key={block.id}
 					draggable={constructorModeEnable}
 					onDragStart={(e) => dragStartHandler(e, block)}
 					onDragEnd={dragEndHandler}
-				/>
+				>
+					{renderElement(block.component)}
+				</DragContainer>
 			))}
 		</div>
 	);
 };
 
 const mapStateToProps = ({
-	drag: { draggableBlock, droppableSection, blocks },
-	calc: { constructorModeEnable },
+	drag: { droppableSection, blocks, constructorModeEnable },
 }) => {
 	return {
-		draggableBlock,
 		droppableSection,
 		constructorModeEnable,
 		blocks,
@@ -71,7 +90,7 @@ const mapStateToProps = ({
 };
 
 const mapDispatchToProps = {
-	dragging,
+	dragStart,
 	setDroppableSection,
 	dragEnd,
 	setBlocks,

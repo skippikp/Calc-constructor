@@ -1,11 +1,24 @@
 import React from 'react';
+import { connect } from 'react-redux';
 
-const Button = ({ className, value, onClick }) => {
+const Button = ({ constructorModeEnable, className, value, onClick }) => {
+	const clickHandler = () => {
+		if (constructorModeEnable) {
+			return;
+		}
+		onClick();
+	};
 	return (
-		<div onClick={onClick} className={className}>
+		<div onClick={clickHandler} className={className}>
 			{value}
 		</div>
 	);
 };
 
-export default Button;
+const mapStateToProps = ({ drag: { constructorModeEnable } }) => {
+	return {
+		constructorModeEnable,
+	};
+};
+
+export default connect(mapStateToProps)(Button);

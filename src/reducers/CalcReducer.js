@@ -1,16 +1,10 @@
-import {
-	ADD_DIGIT,
-	CHOOSE_OPERATION,
-	EVALUATE,
-	CHANGE_CONSTRUCTOR_MODE,
-} from '../actions/constants';
+import { ADD_DIGIT, CHOOSE_OPERATION, EVALUATE } from '../actions/constants';
 
 const initialState = {
 	currentOperand: null,
 	previousOperand: null,
 	operation: null,
 	evaluated: false,
-	constructorModeEnable: true,
 };
 
 const evaluate = ({ currentOperand, previousOperand, operation }) => {
@@ -44,16 +38,7 @@ const evaluate = ({ currentOperand, previousOperand, operation }) => {
 
 const calcReducer = (state = initialState, { type, payload }) => {
 	switch (type) {
-		case CHANGE_CONSTRUCTOR_MODE:
-			return {
-				...state,
-				constructorModeEnable: !state.constructorModeEnable,
-			};
 		case ADD_DIGIT:
-			if (state.constructorModeEnable) {
-				return state;
-			}
-
 			if (state.currentOperand === null && payload === '.') {
 				return {
 					...state,
@@ -93,10 +78,6 @@ const calcReducer = (state = initialState, { type, payload }) => {
 			};
 
 		case CHOOSE_OPERATION:
-			if (state.constructorModeEnable) {
-				return state;
-			}
-
 			if (state.currentOperand === null && state.previousOperand == null) {
 				return state;
 			}
@@ -132,10 +113,6 @@ const calcReducer = (state = initialState, { type, payload }) => {
 			};
 
 		case EVALUATE:
-			if (state.constructorModeEnable) {
-				return state;
-			}
-
 			if (
 				state.operation === null ||
 				state.currentOperand === null ||

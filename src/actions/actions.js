@@ -34,7 +34,7 @@ const dragEnd = () => {
 	return { type: DRAG_END };
 };
 
-const dragging = (draggableBlock) => {
+const dragStart = (draggableBlock) => {
 	return { type: DRAG_START, payload: draggableBlock };
 };
 
@@ -49,7 +49,7 @@ export {
 	addDigit,
 	chooseOperation,
 	evaluate,
-	dragging,
+	dragStart,
 	setDroppableSection,
 	changeConstructorMode,
 	dragEnd,

@@ -1,16 +1,16 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import eventHoc from '../../HOC/eventHoc';
 import './Display.css';
 
 const Display = ({ currentOperand }) => {
+	const bigNumber = `${currentOperand
+		?.slice(0, 21)
+		.toString()}\n${currentOperand?.slice(21).toString()}`;
 	return (
 		<div className="display">
 			<div className="display_text-field">
 				{currentOperand?.length > 11 ? (
-					<h6>{`${currentOperand.slice(0, 21).toString()}\n${currentOperand
-						.slice(21)
-						.toString()}`}</h6>
+					<h6>{bigNumber}</h6>
 				) : (
 					<h3>{currentOperand || '0'}</h3>
 				)}
@@ -25,4 +25,4 @@ const mapStateToProps = ({ calc: { currentOperand } }) => {
 	};
 };
 
-export default connect(mapStateToProps)(eventHoc(Display));
+export default connect(mapStateToProps)(Display);

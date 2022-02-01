@@ -10,6 +10,11 @@ import {
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
+import DragContainer from '../../HOC/DragContainer';
+import Display from '../Display/Display';
+import DigitalBlock from '../Digital-block/DigitalBlock';
+import Operations from '../Operations/Operations';
+import EqualBlock from '../Equal-block/EqualBlock';
 import './Desk.css';
 
 const Desk = ({
@@ -94,6 +99,21 @@ const Desk = ({
 		setDroppableSection(null);
 	};
 
+	const renderElement = (element) => {
+		switch (element) {
+			case 'Display':
+				return <Display />;
+			case 'DigitalBlock':
+				return <DigitalBlock />;
+			case 'Operations':
+				return <Operations />;
+			case 'EqualBlock':
+				return <EqualBlock />;
+			default:
+				return <div>Error</div>;
+		}
+	};
+
 	return (
 		<div className="right-side">
 			<FormGroup>
@@ -112,11 +132,13 @@ const Desk = ({
 						className="desk-item"
 					>
 						{section.items.map((item) => (
-							<item.component
+							<DragContainer
 								key={item.id}
 								onDblClick={() => removeBlockFromDesk(item, section)}
 								draggable={false}
-							/>
+							>
+								{renderElement(item.component)}
+							</DragContainer>
 						))}
 					</div>
 				))}
@@ -132,8 +154,7 @@ const Desk = ({
 };
 
 const mapStateToProps = ({
-	drag: { draggableBlock, blocks },
-	calc: { constructorModeEnable },
+	drag: { constructorModeEnable, draggableBlock, blocks },
 }) => {
 	return {
 		draggableBlock,
